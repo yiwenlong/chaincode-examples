@@ -16,8 +16,6 @@
 package main
 
 import (
-	"fmt"
-	"github.com/hyperledger/fabric-chaincode-go/shim"
 	"github.com/yiwenlong/chaincode-examples/tps"
 	"os"
 )
@@ -25,15 +23,5 @@ import (
 func main() {
 	ccid := os.Args[1]
 	address := os.Args[2]
-	server := &shim.ChaincodeServer{
-		CCID:    ccid,
-		Address: address,
-		CC:      new(tps.Tps),
-		TLSProps: shim.TLSProperties{
-			Disabled: true,
-		},
-	}
-	if err := server.Start(); err != nil {
-		fmt.Printf("Error starting Simple chaincode: %s", err)
-	}
+	tps.BootChaincode(ccid, address)
 }
