@@ -34,7 +34,7 @@ func (t *Tps) Invoke(stub shim.ChaincodeStubInterface) pb.Response {
 	fcn, params := stub.GetFunctionAndParameters()
 	log.Println("Invoke()", fcn, params)
 	if fcn == "put" {
-		stub.PutState(params[0], []byte(params[1]))
+		_ = stub.PutState(params[0], []byte(params[1]))
 		return shim.Success(nil)
 	} else if fcn == "get" {
 		data, err := stub.GetState(params[0])
