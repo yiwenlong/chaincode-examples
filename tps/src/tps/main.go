@@ -16,12 +16,12 @@
 package main
 
 import (
-	"github.com/yiwenlong/chaincode-examples/tps"
-	"os"
+	"github.com/hyperledger/fabric/core/chaincode/shim"
+	"log"
 )
-
 func main() {
-	ccid := os.Args[1]
-	address := os.Args[2]
-	tps.BootChaincode(ccid, address)
+	err := shim.Start(new(Tps))
+	if err != nil {
+		log.Printf("Error starting Simple chaincode: %s", err)
+	}
 }
