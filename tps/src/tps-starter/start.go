@@ -13,35 +13,23 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 //
-package tps
+package tps_starter
 
 import (
+	"fmt"
 	"github.com/hyperledger/fabric-chaincode-go/shim"
-	pb "github.com/hyperledger/fabric-protos-go/peer"
-	"log"
 )
 
-// Tps Chaincode implementation
-type Tps struct {
-}
-
-func (t *Tps) Init(stub shim.ChaincodeStubInterface) pb.Response {
-	log.Println("Tps Init")
-	return shim.Success(nil)
-}
-
-func (t *Tps) Invoke(stub shim.ChaincodeStubInterface) pb.Response {
-	fcn, params := stub.GetFunctionAndParameters()
-	log.Println("Invoke()", fcn, params)
-	if fcn == "put" {
-		_ = stub.PutState(params[0], []byte(params[1]))
-		return shim.Success(nil)
-	} else if fcn == "get" {
-		data, err := stub.GetState(params[0])
-		if err != nil {
-			return shim.Error(err.Error())
-		}
-		return shim.Success(data)
+func BootChaincode(ccid, address string) {
+	server := &shim.ChaincodeServer{
+		CCID:    ccid,
+		Address: address,
+		CC:      new(Tps),
+		TLSProps: shim.TLSProperties{
+			Disabled: true,
+		},
 	}
-	return shim.Error("error")
+	if err := server.Start(); err != nil {
+		fmt.Printf("Error starting Simple chaincode: %s", err)
+	}
 }
